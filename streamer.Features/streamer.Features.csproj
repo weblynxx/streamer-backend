@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="9.0.0" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
+		<PackageReference Include="MediatR.Plugins" Version="0.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.2.0" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.5.0" />
+		<PackageReference Include="My.Extensions.Localization.Json" Version="1.0.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\streamer.db\streamer.db.csproj" />
+	</ItemGroup>
+
+
+</Project>
