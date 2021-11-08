@@ -21,6 +21,8 @@ namespace streamer.db
         private IUserResolveService _userResolveService;
 
         public DbSet<StreamerDm> Streamers { get; set; }
+        public DbSet<ServiceDm> Services { get; set; }
+        public DbSet<StreamerServiceDm> StreamerServices { get; set; }
         public DbSet<RefreshTokenDm> RefreshTokens { get; set; }
 
         public StreamerDbContext(IUserResolveService userResolveService, DbContextOptions<StreamerDbContext> options, IConfiguration configuration) : base(options)
@@ -45,6 +47,8 @@ namespace streamer.db
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new StreamerConfiguration());
+            modelBuilder.ApplyConfiguration(new ServiceConfiguration());
+            modelBuilder.ApplyConfiguration(new StreamerServiceConfiguration());
         }
 
         public void BeginTransaction()
