@@ -11,9 +11,11 @@ namespace streamer.db.Database.DataModelConfigurations
     {
         public void Configure(EntityTypeBuilder<StreamerDm> builder)
         {
-            builder.ToTable("Streamers");
+            builder.ToTable("Streamer");
             builder.HasKey(x => x.Id);
             builder.Property(p => p.Id).HasColumnName("Id");
+            builder.HasMany(streamer => streamer.StreamerServices)
+                .WithOne(service => service.Streamer);
             builder.Property(p => p.CreatedDate).Metadata.AfterSaveBehavior = PropertySaveBehavior.Ignore;
         }
     }
