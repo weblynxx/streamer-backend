@@ -1,3 +1,6 @@
-# Build folder and log file
-build/
-build.log
+.vs/*
+streamer/cloc.exe
+streamer.sln.DotSettings.user
+streamer.SQLiteDataAccess/cloc.exe
+streamer/internal-nlog.txt
+streamer/package-lock.json
