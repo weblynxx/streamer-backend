@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
@@ -22,6 +23,8 @@ namespace streamer.db.Database.DataModel
         public Guid StreamerId { get; set; }
         public string Password { get; set; }
         public string Token { get; set; }
+
+        public virtual ICollection<StreamerServiceDm> StreamerServices { get; set; }
     }
 
 
