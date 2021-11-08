@@ -1,0 +1,12 @@
+C:\Users\nicki\OneDrive\Рабочий стол\Work\streamer\streamer-backend\streamer.Features\obj\Debug\netcoreapp2.2\streamer.Features.csprojAssemblyReference.cache
+C:\Users\nicki\OneDrive\Рабочий стол\Work\streamer\streamer-backend\streamer.Features\obj\Debug\netcoreapp2.2\streamer.Features.AssemblyInfoInputs.cache
+C:\Users\nicki\OneDrive\Рабочий стол\Work\streamer\streamer-backend\streamer.Features\obj\Debug\netcoreapp2.2\streamer.Features.AssemblyInfo.cs
+C:\Users\nicki\OneDrive\Рабочий стол\Work\streamer\streamer-backend\streamer.Features\obj\Debug\netcoreapp2.2\streamer.Features.csproj.CoreCompileInputs.cache
+C:\Users\nicki\OneDrive\Рабочий стол\Work\streamer\streamer-backend\streamer.Features\bin\Debug\netcoreapp2.2\streamer.Features.deps.json
+C:\Users\nicki\OneDrive\Рабочий стол\Work\streamer\streamer-backend\streamer.Features\bin\Debug\netcoreapp2.2\streamer.Features.dll
+C:\Users\nicki\OneDrive\Рабочий стол\Work\streamer\streamer-backend\streamer.Features\bin\Debug\netcoreapp2.2\streamer.Features.pdb
+C:\Users\nicki\OneDrive\Рабочий стол\Work\streamer\streamer-backend\streamer.Features\bin\Debug\netcoreapp2.2\streamer.db.dll
+C:\Users\nicki\OneDrive\Рабочий стол\Work\streamer\streamer-backend\streamer.Features\bin\Debug\netcoreapp2.2\streamer.db.pdb
+C:\Users\nicki\OneDrive\Рабочий стол\Work\streamer\streamer-backend\streamer.Features\obj\Debug\netcoreapp2.2\streamer.Features.csproj.CopyComplete
+C:\Users\nicki\OneDrive\Рабочий стол\Work\streamer\streamer-backend\streamer.Features\obj\Debug\netcoreapp2.2\streamer.Features.dll
+C:\Users\nicki\OneDrive\Рабочий стол\Work\streamer\streamer-backend\streamer.Features\obj\Debug\netcoreapp2.2\streamer.Features.pdb
