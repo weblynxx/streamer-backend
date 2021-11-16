@@ -62,7 +62,6 @@ namespace streamer
         public void ConfigureServices(IServiceCollection services)
         {
             var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
-            StripeConfiguration.ApiKey = Crypto.DecryptString(appSettings.StripeSecretKey);
 
             var authCfg = Configuration.GetSection("Authentication").Get<AppConfiguration.Authentication>();
             SymmetricSecurityKey signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(authCfg.SecretKey));
