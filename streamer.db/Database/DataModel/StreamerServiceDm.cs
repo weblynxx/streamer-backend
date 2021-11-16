@@ -19,6 +19,7 @@ namespace streamer.db.Database.DataModel
 
         public Guid ServiceId { get; set; }
         public ServiceDm Service { get; set; }
+        public string ServiceUserName { get; set; }
     }
 
 
