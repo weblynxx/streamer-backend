@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using streamer.db.Database.DataModel;
 using streamer.db.Database.DataModelConfigurations;
+using streamer.db.Database.Extension;
 using streamer.db.Database.Helpers;
 
 namespace streamer.db
@@ -46,6 +47,7 @@ namespace streamer.db
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Seed();
             modelBuilder.ApplyConfiguration(new StreamerConfiguration());
             modelBuilder.ApplyConfiguration(new ServiceConfiguration());
             modelBuilder.ApplyConfiguration(new StreamerServiceConfiguration());
