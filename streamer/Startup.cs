@@ -209,8 +209,42 @@ namespace streamer
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IUserResolveService, UserResolveService>();
             services.AddTransient<IAppVersionService, AppVersionService>();
+            var a = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath2 = Path.Combine(AppContext.BaseDirectory, a);
+            services.AddSwaggerGen(c =>
+            {
 
-            
+                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                {
+                    Title = "Streamer portal API",
+                    Version = "v1",
+                    Description = "streamer portal API",
+                    TermsOfService = "Terms Of Service"
+                });
+
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+                var security = new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Bearer", new string[] { }},
+                };
+                c.AddSecurityRequirement(security);
+
+                //TODO for OData
+                //c.DocumentFilter<CustomDocumentFilter>();
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+
+
 
 
         }
@@ -272,12 +306,12 @@ namespace streamer
 
             });
 
-            //app.UseSwagger();
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Time-Org V1");
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Streamer V1");
 
-            //});
+            });
 
 
 
