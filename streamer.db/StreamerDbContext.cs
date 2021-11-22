@@ -39,8 +39,10 @@ namespace streamer.db
                 var appSettings = _configuration.GetSection("AppSettings").Get<AppSettings>();
                 var dbUsername = appSettings.DbUsername;
                 var dbPassword = appSettings.DbPassword;
+                var dbHost = appSettings.DbHost;
+                var dbName = appSettings.DbName;
 
-                optionsBuilder.UseNpgsql($"Host=localhost;Database=streamer;Username={dbUsername};Password={dbPassword}");
+                optionsBuilder.UseNpgsql($"Host={dbHost};Database={dbName};Username={dbUsername};Password={dbPassword}");
             }
         }
 
