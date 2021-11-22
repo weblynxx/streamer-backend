@@ -10,6 +10,7 @@ using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using streamer.ApiModel.Auth;
@@ -22,7 +23,7 @@ using streamer.Helpers;
 namespace streamer.Controllers
 {
     [Authorize]
-    [ODataRoutePrefix("Service")]
+    [ODataRoutePrefix("Services")]
     [Route("api/[controller]")]
     public class ServiceController : Controller
     {
@@ -38,6 +39,12 @@ namespace streamer.Controllers
             _dbContext = dbContext;
             _config = config.Value;
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        }
+
+        [HttpGet("[action]")]
+        public IQueryable<ServiceDm> Get()
+        {
+            return _dbContext.Services.AsNoTracking();
         }
 
         [HttpPost("[action]")]

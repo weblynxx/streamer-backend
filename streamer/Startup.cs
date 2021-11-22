@@ -209,8 +209,6 @@ namespace streamer
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IUserResolveService, UserResolveService>();
             services.AddTransient<IAppVersionService, AppVersionService>();
-            var a = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath2 = Path.Combine(AppContext.BaseDirectory, a);
             services.AddSwaggerGen(c =>
             {
 
@@ -322,6 +320,7 @@ namespace streamer
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.EnableLowerCamelCase();
             builder.EntitySet<StreamerDm>("Streamers");
+            builder.EntitySet<ServiceDm>("Services");
             return builder.GetEdmModel();
         }
 
