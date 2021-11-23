@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNet.OData.Routing;
@@ -84,10 +85,17 @@ namespace streamer.Controllers
         public async Task<IActionResult> CreateStreamer([FromBody] StreamerDm userParam)
         {
             var password = userParam.Password;
+            Regex regex = new Regex("^(?=.*[a-z,ä,ö,ü])(?=.*[A-Z,Ä,Ö,Ü])(?=.*[0-9])(?=.*[!@_#?.$%^&*/\\\\])(?=.{8,})");
+            var isPasswordStrong = regex.IsMatch(password);
+            if (!isPasswordStrong)
+            {
+                return BadRequest("password_strong");
+            }
 
             userParam.Token = "";
             userParam.Password = "";
             userParam.CreatedDate = DateTime.UtcNow;
+            userParam.StreamerId = Guid.NewGuid();
             try
             {
                 var result = await userManager.CreateAsync(userParam, password);
