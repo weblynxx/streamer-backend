@@ -89,7 +89,7 @@ namespace streamer.Controllers
             var isPasswordStrong = regex.IsMatch(password);
             if (!isPasswordStrong)
             {
-                return BadRequest("password_strong");
+                return BadRequest("password_strong2");
             }
 
             userParam.Token = "";
