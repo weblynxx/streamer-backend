@@ -1,0 +1,31 @@
+name: Build Docker Images for Prod & Push to DockerHub
+
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+
+jobs:
+
+  build-and-deploy-backend:
+    name: Build and Deploy Backend
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    
+    - name: Docker Build Backend
+      run: |
+        docker build ./python-fastapi-api -t smirnovskoe/streamad_backend:latest
+        
+    - name: Docker Push Backend
+      run: |
+        docker push smirnovskoe/streamad_backend:latest
