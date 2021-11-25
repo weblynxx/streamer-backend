@@ -24,7 +24,7 @@ jobs:
     
     - name: Docker Build Backend
       run: |
-        docker build ./python-fastapi-api -t smirnovskoe/streamad_backend:latest
+        docker build . -t smirnovskoe/streamad_backend:latest
         
     - name: Docker Push Backend
       run: |
