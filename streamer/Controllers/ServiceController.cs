@@ -60,10 +60,10 @@ namespace streamer.Controllers
             var clientId = _config.TwitchClientId;
             var clientSecret = _config.TwitchSecretId;
             var redirect = _config.Domain;
-
+            Logger.Debug($"CliendId: {clientId}, clientSecret: {clientSecret}, redirect: {redirect}");
             Logger.Debug("Try to get access token.....");
             var appAccessTokenResponse = await Client.PostAsync(
-                $"https://id.twitch.tv/oauth2/token?client_id={clientId}&client_secret={clientSecret}&code={model.AccessToken}&grant_type=authorization_code&redirect_uri=http://{redirect}", null
+                $"https://id.twitch.tv/oauth2/token?client_id={clientId}&client_secret={clientSecret}&code={model.AccessToken}&grant_type=authorization_code&redirect_uri=https://{redirect}", null
             );
             var accessToken = JsonConvert.DeserializeObject<TwitchUserAccessTokenData>(await appAccessTokenResponse.Content.ReadAsStringAsync()).AccessToken;
             Logger.Debug($"Ok. Access token {accessToken}");
