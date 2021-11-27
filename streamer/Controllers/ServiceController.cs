@@ -60,18 +60,18 @@ namespace streamer.Controllers
             var clientId = _config.TwitchClientId;
             var clientSecret = _config.TwitchSecretId;
             var redirect = _config.Domain;
-            Logger.Debug($"CliendId: {clientId}, clientSecret: {clientSecret}, redirect: {redirect}");
+            var redirect_uri = redirect == "locahost" ? "http://localhost:2002" : $"https://{redirect}";
             Logger.Debug("Try to get access token.....");
             var appAccessTokenResponse = await Client.PostAsync(
-                $"https://id.twitch.tv/oauth2/token?client_id={clientId}&client_secret={clientSecret}&code={model.AccessToken}&grant_type=authorization_code&redirect_uri=https://{redirect}", null
+                $"https://id.twitch.tv/oauth2/token?client_id={clientId}&client_secret={clientSecret}&code={model.AccessToken}&grant_type=authorization_code&redirect_uri={redirect_uri}", null
             );
             var accessToken = JsonConvert.DeserializeObject<TwitchUserAccessTokenData>(await appAccessTokenResponse.Content.ReadAsStringAsync()).AccessToken;
-            Logger.Debug($"Ok. Access token {accessToken}");
             var userName = GetTwitchUserName(accessToken).Result;
             if (userName == "")
             {
                 return BadRequest("Error when get username for twitch account");
             }
+            Logger.Debug($"Get twitch username - {userName}");
 
             var command = new StreamerServiceAdd.StreamerServiceAddCommand()
             {
