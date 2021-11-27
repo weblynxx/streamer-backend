@@ -56,18 +56,21 @@ namespace streamer.Controllers
             {
                 return BadRequest("user_already_added_service");
             }
+            Logger.Debug("Ok. User didn't link twitch account");
             var clientId = _config.TwitchClientId;
             var clientSecret = _config.TwitchSecretId;
             var redirect = _config.Domain;
 
+            Logger.Debug("Try to get access token.....");
             var appAccessTokenResponse = await Client.PostAsync(
                 $"https://id.twitch.tv/oauth2/token?client_id={clientId}&client_secret={clientSecret}&code={model.AccessToken}&grant_type=authorization_code&redirect_uri=http://{redirect}", null
             );
             var accessToken = JsonConvert.DeserializeObject<TwitchUserAccessTokenData>(await appAccessTokenResponse.Content.ReadAsStringAsync()).AccessToken;
+            Logger.Debug($"Ok. Access token {accessToken}");
             var userName = GetTwitchUserName(accessToken).Result;
             if (userName == "")
             {
-                return BadRequest();
+                return BadRequest("Error when get username for twitch account");
             }
 
             var command = new StreamerServiceAdd.StreamerServiceAddCommand()
