@@ -60,8 +60,19 @@ namespace streamer.Controllers
             Logger.Debug($"WHERE email={streamer.Email}");
             return Ok();
         }
-      
-        
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GenerateNewStreamerId()
+        {
+            var userId = User.GetLoggedUserId();
+            var oldStreamer = _dbContext.Streamers.SingleOrDefault(x => x.Id == userId);
+            oldStreamer.StreamerId = Guid.NewGuid();
+            _dbContext.Streamers.Update(oldStreamer);
+            await _dbContext.SaveChangesAsync();
+            return Ok();
+        }
+
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] StreamerDm streamer)
         {
