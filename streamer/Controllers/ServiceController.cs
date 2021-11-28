@@ -60,7 +60,7 @@ namespace streamer.Controllers
             var clientId = _config.TwitchClientId;
             var clientSecret = _config.TwitchSecretId;
             var redirect = _config.Domain;
-            var redirect_uri = redirect == "locahost" ? "http://localhost:2002" : $"https://{redirect}";
+            var redirect_uri = redirect == "localhost" ? "http://localhost:2002" : $"https://{redirect}";
             Logger.Debug("Try to get access token.....");
             var appAccessTokenResponse = await Client.PostAsync(
                 $"https://id.twitch.tv/oauth2/token?client_id={clientId}&client_secret={clientSecret}&code={model.AccessToken}&grant_type=authorization_code&redirect_uri={redirect_uri}", null
