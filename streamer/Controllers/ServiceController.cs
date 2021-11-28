@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -45,6 +47,21 @@ namespace streamer.Controllers
         public IQueryable<ServiceDm> Get()
         {
             return _dbContext.Services.AsNoTracking();
+        }
+
+        [HttpGet("[action]")]
+        public IQueryable GetLinkedServices()
+        {
+            var userId = User.GetLoggedUserId();
+            var queryable = _dbContext.StreamerServices
+                .AsNoTracking()
+                .Include(x => x.Service)
+                .Where(x => x.StreamerId == userId)
+                .Select(x => new {
+                    ServiceName = x.Service.Name,
+                    UserName = x.ServiceUserName
+                });
+            return queryable;
         }
 
         [HttpPost("[action]")]
