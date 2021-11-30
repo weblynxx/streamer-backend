@@ -27,6 +27,7 @@ namespace streamer.db.Database.DataModel
         public int Floor { get; set; }
         // 115b
         public string Flat { get; set; }
+        public string IntercomCode { get; set; }
 
         public string Authorities { get; set; }
 
