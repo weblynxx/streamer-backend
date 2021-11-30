@@ -13,8 +13,21 @@ namespace streamer.db.Database.DataModel
         public string Phone { get; set; }
 
         
+        // Mowscow
         public string City { get; set; }
+        // Lenina
         public string Street { get; set; }
+        // 5
+        public string House { get; set; }
+        // korpus - 2
+        public string HouseBuilding { get; set; }
+        // 10
+        public string Entrance { get; set; }
+        //5
+        public int Floor { get; set; }
+        // 115b
+        public string Flat { get; set; }
+
         public string Authorities { get; set; }
 
 
@@ -26,6 +39,7 @@ namespace streamer.db.Database.DataModel
 
         public virtual ICollection<StreamerServiceDm> StreamerServices { get; set; }
     }
+
 
 
 }
