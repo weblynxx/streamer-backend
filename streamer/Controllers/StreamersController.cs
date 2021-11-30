@@ -104,7 +104,38 @@ namespace streamer.Controllers
             Logger.Debug().Message("Updated").Write();
             return Ok(streamer);
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UpdateContactData([FromBody] StreamerDm streamer)
+        {
+            var userId = User.GetLoggedUserId();
+            var oldStreamer = _dbContext.Streamers.SingleOrDefault(x => x.Id == userId);
+
+            if (oldStreamer != null)
+            {
+                oldStreamer.City = streamer.City;
+                oldStreamer.Phone = streamer.Phone;
+                oldStreamer.Street = streamer.Street;
+                oldStreamer.House = streamer.House;
+                oldStreamer.HouseBuilding = streamer.HouseBuilding;
+                oldStreamer.Entrance = streamer.Entrance;
+                oldStreamer.Floor = streamer.Floor;
+                oldStreamer.Flat = streamer.Flat;
+                oldStreamer.IntercomCode = streamer.IntercomCode;
+               
+                _dbContext.Streamers.Update(oldStreamer);
+                await _dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                return BadRequest("user not found");
+            }
+
+            Logger.Debug("Updated");
+            return Ok();
+        }
         
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
