@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 
 namespace streamer.db.Database.DataModel
 {
@@ -40,6 +43,23 @@ namespace streamer.db.Database.DataModel
 
         public virtual ICollection<StreamerServiceDm> StreamerServices { get; set; }
     }
+
+    public class PartnerDm //external
+    {
+        [Key]
+        [ForeignKey("StreamerDm")]
+        public Guid Id { get; set; }
+
+        public string DeliveryName { get; set; }
+
+        public Guid? StreamerId { get; set; }
+        [CsvHelper.Configuration.Attributes.Ignore]
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public virtual StreamerDm Streamer { get; set; }
+
+    }
+
 
 
 

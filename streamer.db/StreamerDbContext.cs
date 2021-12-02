@@ -23,6 +23,7 @@ namespace streamer.db
 
         public DbSet<StreamerDm> Streamers { get; set; }
         public DbSet<ServiceDm> Services { get; set; }
+        public DbSet<PartnerDm> Partners { get; set; }
         public DbSet<StreamerServiceDm> StreamerServices { get; set; }
         public DbSet<RefreshTokenDm> RefreshTokens { get; set; }
 
@@ -53,6 +54,7 @@ namespace streamer.db
             modelBuilder.ApplyConfiguration(new StreamerConfiguration());
             modelBuilder.ApplyConfiguration(new ServiceConfiguration());
             modelBuilder.ApplyConfiguration(new StreamerServiceConfiguration());
+            modelBuilder.ApplyConfiguration(new PartnerConfiguration());
         }
 
         public void BeginTransaction()
