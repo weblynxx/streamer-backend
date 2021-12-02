@@ -4,7 +4,7 @@
         <name>streamer</name>
     </assembly>
     <members>
-        <member name="M:streamer.Controllers.StreamersController.GetStreamerAddressInfoi(System.Guid)">
+        <member name="M:streamer.Controllers.StreamersController.GetStreamerAddressInfo(System.Guid)">
             <summary>
             Return address info of Streamer by StreamerId
             Requires only PARTER_ROLE
