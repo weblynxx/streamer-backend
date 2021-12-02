@@ -4,6 +4,14 @@
         <name>streamer</name>
     </assembly>
     <members>
+        <member name="M:streamer.Controllers.StreamersController.GetStreamerAddressInfoi(System.Guid)">
+            <summary>
+            Return address info of Streamer by StreamerId
+            Requires only PARTER_ROLE
+            </summary>
+            <param name="streamerId"></param>
+            <returns></returns>
+        </member>
         <member name="P:streamer.Helpers.AppConfiguration.Authentication.Facebook">
             <summary>
             Gets or sets Facebook auth properties
