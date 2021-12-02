@@ -72,6 +72,44 @@ namespace streamer.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Return address info of Streamer by StreamerId
+        /// Requires only PARTER_ROLE
+        /// </summary>
+        /// <param name="streamerId"></param>
+        /// <returns></returns>
+        [HttpGet("[action]/{streamerId}")]
+        public async Task<IActionResult> GetStreamerAddressInfo(Guid streamerId)
+        {
+            var partnerId = User.GetLoggedUserId();
+            var partner = _dbContext.Streamers.SingleOrDefault(x => x.Id == partnerId);
+            if (partner == null || partner.Authorities != "ROLE_PARTNER")
+            {
+                return BadRequest("invalid_privileges");
+            }
+
+            var streamer = _dbContext.Streamers.SingleOrDefault(x => x.StreamerId == streamerId);
+            if (streamer == null)
+            {
+                return BadRequest($"Can't find Streamer with streamerId - {streamerId}");
+            }
+            
+            return Ok(new
+            {
+                FirstName = streamer.FirstName,
+                LastName = streamer.LastName,
+                Phone = streamer.Phone,
+                City = streamer.City,
+                Street = streamer.Street,
+                House = streamer.House,
+                HouseBuilding = streamer.HouseBuilding,
+                Entrance = streamer.Entrance,
+                Floor = streamer.Floor,
+                Flat = streamer.Flat,
+                IntercomCode = streamer.IntercomCode
+            });
+        }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] StreamerDm streamer)
