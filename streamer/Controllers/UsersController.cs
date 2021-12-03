@@ -115,40 +115,7 @@ namespace streamer.Controllers
             return BadRequest();
         }
 
-        [AllowAnonymous]
-        [HttpPost("[action]")]
-        public async Task<IActionResult> CreatePartner([FromBody] StreamerDm userParam)
-        {
-            var password = userParam.Password;
-            Regex regex = new Regex("^(?=.*[a-z,ä,ö,ü])(?=.*[A-Z,Ä,Ö,Ü])(?=.*[0-9])(?=.*[!@_#?.$%^&*/\\\\])(?=.{8,})");
-            var isPasswordStrong = regex.IsMatch(password);
-            if (!isPasswordStrong)
-            {
-                return BadRequest("password_strong");
-            }
-
-            userParam.Token = "";
-            userParam.Password = "";
-            userParam.Authorities = "ROLE_PARTNER";
-            userParam.CreatedDate = DateTime.UtcNow;
-            try
-            {
-                var result = await userManager.CreateAsync(userParam, password);
-                if (result.Succeeded)
-                {
-                    Logger.Debug($"userParam: {JsonConvert.SerializeObject(userParam)}");
-                    Logger.Debug("Ok");
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-
-            Logger.Error("BadRequest");
-            return BadRequest();
-        }
+      
 
         // POST api/auth/login
         [HttpPost("login")]
