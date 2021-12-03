@@ -28,6 +28,7 @@ using Newtonsoft.Json.Serialization;
 using streamer.ApiModel.settings;
 using streamer.db;
 using streamer.db.Database.DataModel;
+using streamer.db.Database.Dto;
 using streamer.db.Database.Helpers;
 using streamer.Extensions;
 using streamer.Features.interfaces.services;
@@ -319,8 +320,8 @@ namespace streamer
         {
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.EnableLowerCamelCase();
-            builder.EntitySet<StreamerDm>("Streamers");
-            builder.EntitySet<ServiceDm>("Services");
+            builder.EntitySet<PartnerDto>("Partners");
+            builder.EntityType<PartnerDto>().DerivesFromNothing();
             return builder.GetEdmModel();
         }
 

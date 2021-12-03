@@ -3,6 +3,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +16,7 @@ using NLog.Fluent;
 using PasswordGenerator;
 using streamer.db;
 using streamer.db.Database.DataModel;
+using streamer.db.Database.Dto;
 using streamer.db.Database.Helpers;
 using streamer.Features.Helpers;
 using streamer.Features.Partner;
@@ -24,7 +27,7 @@ namespace streamer.Controllers
     [Authorize]
     [ODataRoutePrefix("Partners")]
     [Route("api/[controller]")]
-    public class PartnersController : Controller
+    public class PartnersController : ODataController
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly StreamerDbContext _dbContext;
@@ -41,8 +44,8 @@ namespace streamer.Controllers
             _mediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
         }
 
-        [HttpPost("[action]/{deliveryName}/{deliveryType}/{deliveryType}")]
-        public async Task<IActionResult> CreatePartner([FromBody] StreamerDm userParam, string deliveryName, DeliveryType type)
+        [HttpPost("[action]/{deliveryType}")]
+        public async Task<IActionResult> CreatePartner([FromBody] StreamerDm userParam, DeliveryType type)
         {
             var userId = User.GetLoggedUserId();
             var user = _dbContext.Streamers.SingleOrDefault(x => x.Id == userId);
@@ -69,7 +72,8 @@ namespace streamer.Controllers
                 if (result.Succeeded)
                 {
                     var createdAppUser = await _userManager.FindByEmailAsync(userParam.Email);
-                    var model = await _mediator.Send(new PartnerAddUpdate.PartnerAddUpdateCommand(){ Streamer = createdAppUser, DeliveryName = deliveryName, Type = type});
+                    var model = await _mediator.Send(new PartnerAddUpdate.PartnerAddUpdateCommand(){ Streamer = createdAppUser, DeliveryName = createdAppUser.FirstName, Type = type});
+                    return Ok();
 
                 }
             }
@@ -82,18 +86,22 @@ namespace streamer.Controllers
             return BadRequest();
         }
 
+        [ODataRoute]
         [HttpGet("[action]")]
-        public IQueryable Get()
+        [EnableQuery(PageSize = 25, AllowedQueryOptions = AllowedQueryOptions.All
+            , HandleNullPropagation = HandleNullPropagationOption.True)]
+        public IQueryable<PartnerDto> Get()
         {
-            return _dbContext.Partners.Include(x => x.Streamer).Select(x => new
+            return _dbContext.Partners.AsNoTracking().Include(x => x.Streamer).Select(x => new PartnerDto()
             {
                 Id = x.Id,
                 FirstName = x.Streamer.FirstName,
                 LastName =  x.Streamer.LastName,
-                email = x.Streamer.Email,
+                Email = x.Streamer.Email,
                 UserName = x.Streamer.UserName,
-                DeliveryName = x.DeliveryName
-        });
+                DeliveryName = x.DeliveryName,
+                DeliveryType = x.Type
+        }).AsQueryable();
         }
 
     }

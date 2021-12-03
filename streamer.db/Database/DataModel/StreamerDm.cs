@@ -63,8 +63,8 @@ namespace streamer.db.Database.DataModel
 
     public enum DeliveryType
     {
-        Food = 1,
-        Clothes = 2,
+        Food = 0,
+        Clothes = 1,
     }
 
 
