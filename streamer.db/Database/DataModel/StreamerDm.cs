@@ -51,6 +51,7 @@ namespace streamer.db.Database.DataModel
         public Guid Id { get; set; }
 
         public string DeliveryName { get; set; }
+        public DeliveryType Type { get; set; }
 
         public Guid? StreamerId { get; set; }
         [CsvHelper.Configuration.Attributes.Ignore]
@@ -58,6 +59,12 @@ namespace streamer.db.Database.DataModel
         [IgnoreDataMember]
         public virtual StreamerDm Streamer { get; set; }
 
+    }
+
+    public enum DeliveryType
+    {
+        Food = 1,
+        Clothes = 2,
     }
 
 
