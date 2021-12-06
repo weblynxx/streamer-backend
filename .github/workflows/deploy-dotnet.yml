@@ -24,6 +24,7 @@ jobs:
     
     - name: Docker Build Backend
       run: |
+
         docker build . -t smirnovskoe/streamad_backend:prod
         
     - name: Docker Push Backend
