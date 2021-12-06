@@ -49,7 +49,10 @@ namespace streamer
         {
             Configuration = configuration;
             _appHost = appHost;
-
+            
+            var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
+            Console.WriteLine("{0} {1} {2} {3}",appSettings.DbUsername, appSettings.DbPassword, appSettings.DbHost, appSettings.DbName);
+            
             using (var db = new StreamerDbContext(null, new DbContextOptions<StreamerDbContext>(), Configuration))
             {
                 //db.Database.EnsureCreated();
