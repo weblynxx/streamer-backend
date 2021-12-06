@@ -39,6 +39,7 @@ using streamer.Services;
 using Stripe;
 using Swashbuckle.AspNetCore.Swagger;
 
+
 namespace streamer
 {
     public class Startup
