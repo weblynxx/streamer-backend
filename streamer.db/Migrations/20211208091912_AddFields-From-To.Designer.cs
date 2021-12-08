@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using streamer.db;
@@ -9,9 +10,10 @@ using streamer.db;
 namespace streamer.db.Migrations
 {
     [DbContext(typeof(StreamerDbContext))]
-    partial class StreamerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211208091912_AddFields-From-To")]
+    partial class AddFieldsFromTo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,8 +265,6 @@ namespace streamer.db.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
-                    b.Property<bool>("isStoppedDelivery");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -282,7 +282,7 @@ namespace streamer.db.Migrations
                             Id = new Guid("cf111dde-367b-4528-8558-3d753371ce34"),
                             AccessFailedCount = 0,
                             Authorities = "ROLE_ADMIN",
-                            ConcurrencyStamp = "6cc19d44-2ae4-467c-8f00-e597368f478b",
+                            ConcurrencyStamp = "9450beed-a4f9-4e2d-bc47-1f8bee85c541",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmailConfirmed = false,
                             FirstName = "John",
@@ -292,14 +292,13 @@ namespace streamer.db.Migrations
                             LastName = "Admin",
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKV2up/EB5qZG47ZpJ+Lep+nJCR542psx/zBzRaHu/mOogwMlA6sXIcjMMi0JMM0SQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELDYoDP7u0cIlyH6NA0caqJ4mMHIJ1q4jOUH/vTZPUvyo2oa8rCd+MtJHI2okzkOcQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "09355be4-a18d-41a9-acce-dd48c68211d7",
                             StreamerId = new Guid("00000000-0000-0000-0000-000000000000"),
                             To = new TimeSpan(0, 0, 0, 0, 0),
                             TwoFactorEnabled = false,
-                            UserName = "admin",
-                            isStoppedDelivery = false
+                            UserName = "admin"
                         });
                 });
 

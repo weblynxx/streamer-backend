@@ -34,6 +34,10 @@ namespace streamer.db.Database.DataModel
 
         public string Authorities { get; set; }
 
+        public TimeSpan From { get; set; }
+        public TimeSpan To { get; set; }
+        public bool isStoppedDelivery { get; set; }
+
 
         public DateTime CreatedDate { get; set; }
         public DateTime LastLoginDate { get; set; }
