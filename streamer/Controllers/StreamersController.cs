@@ -172,7 +172,30 @@ namespace streamer.Controllers
             Logger.Debug("Updated");
             return Ok();
         }
-        
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UpdateTimeDelivery([FromBody] StreamerDm streamer)
+        {
+            var userId = User.GetLoggedUserId();
+            var oldStreamer = _dbContext.Streamers.SingleOrDefault(x => x.Id == userId);
+
+            if (oldStreamer != null)
+            {
+                oldStreamer.From = streamer.From;
+                oldStreamer.To = streamer.To;
+                oldStreamer.isStoppedDelivery = streamer.isStoppedDelivery;
+
+                _dbContext.Streamers.Update(oldStreamer);
+                await _dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                return BadRequest("user not found");
+            }
+
+            Logger.Debug("Updated");
+            return Ok();
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
