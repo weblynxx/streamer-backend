@@ -51,7 +51,7 @@ namespace streamer
             _appHost = appHost;
             
             var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
-            Console.WriteLine("{0} {1} {2} {3}",appSettings.DbUsername, appSettings.DbPassword, appSettings.DbHost, appSettings.DbName);
+            Console.WriteLine("{0} {1} {2} {3} {4}",appSettings.DbUsername, appSettings.DbPassword, appSettings.DbHost, appSettings.DbName, appSettings.Domain);
             
             using (var db = new StreamerDbContext(null, new DbContextOptions<StreamerDbContext>(), Configuration))
             {
