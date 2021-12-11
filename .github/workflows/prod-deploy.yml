@@ -28,4 +28,4 @@ jobs:
         
     - name: Docker Push Backend
       run: |
-        docker push smirnovskoe/streamad_backend:prdo
+        docker push smirnovskoe/streamad_backend:prod
