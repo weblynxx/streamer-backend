@@ -38,6 +38,8 @@ namespace streamer.db.Database.DataModel
         public TimeSpan To { get; set; }
         public bool isStoppedDelivery { get; set; }
 
+        public string FoodPreferenceText { get; set; }
+        public string ClothesPreferenceText { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime LastLoginDate { get; set; }
