@@ -48,6 +48,7 @@ namespace streamer.db.Database.DataModel
         public string Token { get; set; }
 
         public virtual ICollection<StreamerServiceDm> StreamerServices { get; set; }
+        public virtual ICollection<StreamerPreferenceDm> StreamerPreferences { get; set; }
     }
 
     public class PartnerDm //external
