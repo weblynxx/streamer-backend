@@ -196,6 +196,49 @@ namespace streamer.Controllers
             Logger.Debug("Updated");
             return Ok();
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UpdateFoodPreferenceText([FromBody] StreamerDm streamer)
+        {
+            var userId = User.GetLoggedUserId();
+            var oldStreamer = _dbContext.Streamers.SingleOrDefault(x => x.Id == userId);
+
+            if (oldStreamer != null)
+            {
+                oldStreamer.FoodPreferenceText= streamer.FoodPreferenceText;
+
+                _dbContext.Streamers.Update(oldStreamer);
+                await _dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                return BadRequest("user not found");
+            }
+
+            Logger.Debug("Updated");
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UpdateClothesPreferenceText([FromBody] StreamerDm streamer)
+        {
+            var userId = User.GetLoggedUserId();
+            var oldStreamer = _dbContext.Streamers.SingleOrDefault(x => x.Id == userId);
+
+            if (oldStreamer != null)
+            {
+                oldStreamer.ClothesPreferenceText= streamer.ClothesPreferenceText;
+
+                _dbContext.Streamers.Update(oldStreamer);
+                await _dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                return BadRequest("user not found");
+            }
+
+            Logger.Debug("Updated");
+            return Ok();
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
