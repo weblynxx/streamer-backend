@@ -26,6 +26,7 @@ namespace streamer.db
         public DbSet<PartnerDm> Partners { get; set; }
         public DbSet<StreamerServiceDm> StreamerServices { get; set; }
         public DbSet<PreferenceDm> Preferences { get; set; }
+        public DbSet<StreamerPreferenceDm> StreamerPreferences { get; set; }
         public DbSet<RefreshTokenDm> RefreshTokens { get; set; }
 
         public StreamerDbContext(IUserResolveService userResolveService, DbContextOptions<StreamerDbContext> options, IConfiguration configuration) : base(options)
@@ -57,6 +58,7 @@ namespace streamer.db
             modelBuilder.ApplyConfiguration(new StreamerServiceConfiguration());
             modelBuilder.ApplyConfiguration(new PartnerConfiguration());
             modelBuilder.ApplyConfiguration(new PreferenceConfiguration());
+            modelBuilder.ApplyConfiguration(new StreamerPreferenceConfiguration());
         }
 
         public void BeginTransaction()
