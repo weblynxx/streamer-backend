@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using streamer.db;
@@ -9,9 +10,10 @@ using streamer.db;
 namespace streamer.db.Migrations
 {
     [DbContext(typeof(StreamerDbContext))]
-    partial class StreamerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211211154832_AddTable-Preferences")]
+    partial class AddTablePreferences
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,97 +161,97 @@ namespace streamer.db.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("026be9b4-beaa-45aa-876d-271aa539a8fb"),
+                            Id = new Guid("0cecd9ee-f8b0-46fc-92a3-e2c847f531fc"),
                             Name = "pizza",
                             Type = 0
                         },
                         new
                         {
-                            Id = new Guid("0be66cc3-6804-4885-8acf-1b49f46b1a58"),
+                            Id = new Guid("5f453949-9525-408c-b558-889bfb52632a"),
                             Name = "sushi",
                             Type = 0
                         },
                         new
                         {
-                            Id = new Guid("0cecd9ee-f8b0-46fc-92a3-e2c847f531fc"),
+                            Id = new Guid("8bd2091c-78d2-4595-8679-ee5394357870"),
                             Name = "steaks",
                             Type = 0
                         },
                         new
                         {
-                            Id = new Guid("242cf954-086c-4c0f-9930-b22591ce978e"),
+                            Id = new Guid("af250697-517c-4368-9e9c-aa6cba27eb33"),
                             Name = "hot_dogs",
                             Type = 0
                         },
                         new
                         {
-                            Id = new Guid("43b0e39a-7a4e-4798-9249-e56cb188518f"),
+                            Id = new Guid("ded76410-cbe7-4ab5-ae6f-f35fdaec41ea"),
                             Name = "vietnamese_food",
                             Type = 0
                         },
                         new
                         {
-                            Id = new Guid("5f453949-9525-408c-b558-889bfb52632a"),
+                            Id = new Guid("242cf954-086c-4c0f-9930-b22591ce978e"),
                             Name = "georgian_food",
                             Type = 0
                         },
                         new
                         {
-                            Id = new Guid("6a1b34e4-24ac-46ba-b597-6104485b4bfd"),
+                            Id = new Guid("f3e0a654-73f7-4a5f-b749-74a3b3f4d5ef"),
                             Name = "seafood",
                             Type = 0
                         },
                         new
                         {
-                            Id = new Guid("71beecfb-66e5-4432-904f-e0033ae2b9e7"),
+                            Id = new Guid("b1920383-6d50-412f-860f-c5f255404930"),
                             Name = "bakery_products",
                             Type = 0
                         },
                         new
                         {
-                            Id = new Guid("8bd2091c-78d2-4595-8679-ee5394357870"),
+                            Id = new Guid("026be9b4-beaa-45aa-876d-271aa539a8fb"),
                             Name = "burgers",
                             Type = 0
                         },
                         new
                         {
-                            Id = new Guid("8d232f73-4430-4498-9b26-4490c083eb42"),
+                            Id = new Guid("b6f9de67-64c2-4706-81f9-911e2658c718"),
                             Name = "footwear",
                             Type = 1
                         },
                         new
                         {
-                            Id = new Guid("af250697-517c-4368-9e9c-aa6cba27eb33"),
+                            Id = new Guid("ccb77e99-f5e6-496e-b972-e0e62b7a97c3"),
                             Name = "head",
                             Type = 1
                         },
                         new
                         {
-                            Id = new Guid("b1920383-6d50-412f-860f-c5f255404930"),
+                            Id = new Guid("f9e0d1f4-b7f6-4fb2-81f4-a44f5f0f77b0"),
                             Name = "trousers",
                             Type = 1
                         },
                         new
                         {
-                            Id = new Guid("b6f9de67-64c2-4706-81f9-911e2658c718"),
+                            Id = new Guid("6a1b34e4-24ac-46ba-b597-6104485b4bfd"),
                             Name = "socks",
                             Type = 1
                         },
                         new
                         {
-                            Id = new Guid("ccb77e99-f5e6-496e-b972-e0e62b7a97c3"),
+                            Id = new Guid("0be66cc3-6804-4885-8acf-1b49f46b1a58"),
                             Name = "sweaters",
                             Type = 1
                         },
                         new
                         {
-                            Id = new Guid("ded76410-cbe7-4ab5-ae6f-f35fdaec41ea"),
+                            Id = new Guid("43b0e39a-7a4e-4798-9249-e56cb188518f"),
                             Name = "jackets",
                             Type = 1
                         },
                         new
                         {
-                            Id = new Guid("f3e0a654-73f7-4a5f-b749-74a3b3f4d5ef"),
+                            Id = new Guid("71beecfb-66e5-4432-904f-e0033ae2b9e7"),
                             Name = "jewelry",
                             Type = 1
                         },
@@ -261,7 +263,7 @@ namespace streamer.db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f9e0d1f4-b7f6-4fb2-81f4-a44f5f0f77b0"),
+                            Id = new Guid("8d232f73-4430-4498-9b26-4490c083eb42"),
                             Name = "t_shirts",
                             Type = 1
                         });
@@ -323,8 +325,6 @@ namespace streamer.db.Migrations
 
                     b.Property<string>("City");
 
-                    b.Property<string>("ClothesPreferenceText");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -342,8 +342,6 @@ namespace streamer.db.Migrations
                     b.Property<string>("Flat");
 
                     b.Property<int>("Floor");
-
-                    b.Property<string>("FoodPreferenceText");
 
                     b.Property<TimeSpan>("From");
 
@@ -411,7 +409,7 @@ namespace streamer.db.Migrations
                             Id = new Guid("cf111dde-367b-4528-8558-3d753371ce34"),
                             AccessFailedCount = 0,
                             Authorities = "ROLE_ADMIN",
-                            ConcurrencyStamp = "3331538e-c974-4cb7-9e4b-f99f6f0f9572",
+                            ConcurrencyStamp = "7729a4cd-f863-4d70-b5bc-caf8f4400fca",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmailConfirmed = false,
                             FirstName = "John",
@@ -421,7 +419,7 @@ namespace streamer.db.Migrations
                             LastName = "Admin",
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKpHw0+R1f5uhD4GqpoHsHeW/JKQPGTzzmq7/4S/ZF7CDqQL+/5I0Zu8rh8Xcf7sZQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJes6qf/f3fglxSoG3Wxn00yR9a0UHA6O3f9AGzoqgDMwwqPre1DY1gtrkZAvspwrg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "09355be4-a18d-41a9-acce-dd48c68211d7",
                             StreamerId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -430,24 +428,6 @@ namespace streamer.db.Migrations
                             UserName = "admin",
                             isStoppedDelivery = false
                         });
-                });
-
-            modelBuilder.Entity("streamer.db.Database.DataModel.StreamerPreferenceDm", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("PreferenceId");
-
-                    b.Property<Guid>("StreamerId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PreferenceId");
-
-                    b.HasIndex("StreamerId");
-
-                    b.ToTable("StreamerPreference");
                 });
 
             modelBuilder.Entity("streamer.db.Database.DataModel.StreamerServiceDm", b =>
@@ -520,19 +500,6 @@ namespace streamer.db.Migrations
                     b.HasOne("streamer.db.Database.DataModel.StreamerDm", "Streamer")
                         .WithMany()
                         .HasForeignKey("StreamerId");
-                });
-
-            modelBuilder.Entity("streamer.db.Database.DataModel.StreamerPreferenceDm", b =>
-                {
-                    b.HasOne("streamer.db.Database.DataModel.PreferenceDm", "Preference")
-                        .WithMany()
-                        .HasForeignKey("PreferenceId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("streamer.db.Database.DataModel.StreamerDm", "Streamer")
-                        .WithMany("StreamerPreferences")
-                        .HasForeignKey("StreamerId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("streamer.db.Database.DataModel.StreamerServiceDm", b =>

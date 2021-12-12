@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using streamer.db;
@@ -9,9 +10,10 @@ using streamer.db;
 namespace streamer.db.Migrations
 {
     [DbContext(typeof(StreamerDbContext))]
-    partial class StreamerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211211193512_AddFields-PreferenceText")]
+    partial class AddFieldsPreferenceText
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -411,7 +413,7 @@ namespace streamer.db.Migrations
                             Id = new Guid("cf111dde-367b-4528-8558-3d753371ce34"),
                             AccessFailedCount = 0,
                             Authorities = "ROLE_ADMIN",
-                            ConcurrencyStamp = "3331538e-c974-4cb7-9e4b-f99f6f0f9572",
+                            ConcurrencyStamp = "08888f73-743c-4253-834c-4c5892374325",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmailConfirmed = false,
                             FirstName = "John",
@@ -421,7 +423,7 @@ namespace streamer.db.Migrations
                             LastName = "Admin",
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKpHw0+R1f5uhD4GqpoHsHeW/JKQPGTzzmq7/4S/ZF7CDqQL+/5I0Zu8rh8Xcf7sZQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELJVo5qa2pm/uUNCoTVU8aan0o77YJ+f3vockCmMq11/4LRN813qcYlQzSi3iIL0QQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "09355be4-a18d-41a9-acce-dd48c68211d7",
                             StreamerId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -430,24 +432,6 @@ namespace streamer.db.Migrations
                             UserName = "admin",
                             isStoppedDelivery = false
                         });
-                });
-
-            modelBuilder.Entity("streamer.db.Database.DataModel.StreamerPreferenceDm", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("PreferenceId");
-
-                    b.Property<Guid>("StreamerId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PreferenceId");
-
-                    b.HasIndex("StreamerId");
-
-                    b.ToTable("StreamerPreference");
                 });
 
             modelBuilder.Entity("streamer.db.Database.DataModel.StreamerServiceDm", b =>
@@ -520,19 +504,6 @@ namespace streamer.db.Migrations
                     b.HasOne("streamer.db.Database.DataModel.StreamerDm", "Streamer")
                         .WithMany()
                         .HasForeignKey("StreamerId");
-                });
-
-            modelBuilder.Entity("streamer.db.Database.DataModel.StreamerPreferenceDm", b =>
-                {
-                    b.HasOne("streamer.db.Database.DataModel.PreferenceDm", "Preference")
-                        .WithMany()
-                        .HasForeignKey("PreferenceId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("streamer.db.Database.DataModel.StreamerDm", "Streamer")
-                        .WithMany("StreamerPreferences")
-                        .HasForeignKey("StreamerId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("streamer.db.Database.DataModel.StreamerServiceDm", b =>
