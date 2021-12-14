@@ -1,22 +1,20 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNet.OData;
-using Microsoft.AspNet.OData.Query;
-using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using NLog.Fluent;
-using PasswordGenerator;
 using streamer.db;
 using streamer.db.Database.DataModel;
 using streamer.db.Database.Dto;
@@ -111,10 +109,53 @@ namespace streamer.Controllers
                 Email = x.Streamer.Email,
                 UserName = x.Streamer.UserName,
                 DeliveryName = x.DeliveryName,
-                DeliveryType = x.Type
+                DeliveryType = x.Type,
+                Logo = GetLogoByPartnerId(x.Id)
+
         }).AsQueryable();
         }
 
+        private string GetLogoByPartnerId(Guid partnerId)
+        {
+            var result = "";
+            var mainImage = Path.Combine(_env.WebRootPath, partnerId.ToString(), $"{partnerId}.png");
+
+            Logger.Debug(mainImage);
+            if (System.IO.File.Exists(mainImage))
+            {
+                result = FromFileToBase64String(mainImage);
+
+            }
+            else
+            {
+                Logger.Debug($"File {mainImage} not exist");
+            }
+
+            return result;
+        }
+        private string FromFileToBase64String(string file)
+        {
+            try
+            {
+                using (Image image = Image.FromFile(file))
+                {
+                    using (MemoryStream m = new MemoryStream())
+                    {
+                        image.Save(m, image.RawFormat);
+                        byte[] imageBytes = m.ToArray();
+
+                        // Convert byte[] to Base64 String
+                        var base64String = Convert.ToBase64String(imageBytes);
+                        return "data:image/png;base64," + base64String;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return ex.ToString();
+            }
+        }
         [HttpPost("[action]")]
         [DisableRequestSizeLimit]
         public async Task<IActionResult> UploadImage(ImageFile imagefile)

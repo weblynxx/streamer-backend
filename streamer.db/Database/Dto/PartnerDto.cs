@@ -10,6 +10,7 @@ namespace streamer.db.Database.Dto
         public string UserName { get; set; }
         public string DeliverName { get; set; }
         public DeliveryType DeliveryType { get; set; }
+        public string Logo { get; set; }
     } 
 
 
