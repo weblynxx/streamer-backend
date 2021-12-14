@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -7,6 +8,8 @@ using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +27,12 @@ using streamer.Helpers;
 
 namespace streamer.Controllers
 {
+    public class ImageFile
+    {
+        public IFormFile File { get; set; }
+        public string TargetFolder { get; set; }
+    }
+
     [Authorize]
     [ODataRoutePrefix("Partners")]
     [Route("api/[controller]")]
@@ -34,12 +43,14 @@ namespace streamer.Controllers
         private readonly IOptions<AppSettings> _config;
         private readonly UserManager<StreamerDm> _userManager;
         private readonly IMediator _mediator;
+        private readonly IHostingEnvironment _env;
 
         public PartnersController(StreamerDbContext dbContext, IOptions<AppSettings> config,
-            UserManager<StreamerDm> userManager, IMediator mediator)
+            UserManager<StreamerDm> userManager, IMediator mediator, IHostingEnvironment env)
         {
             _dbContext = dbContext;
             _config = config;
+            _env = env;
             _userManager = userManager;
             _mediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
         }
@@ -102,6 +113,49 @@ namespace streamer.Controllers
                 DeliveryName = x.DeliveryName,
                 DeliveryType = x.Type
         }).AsQueryable();
+        }
+
+        [HttpPost("[action]")]
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadImage(ImageFile imagefile)
+        {
+
+            if (imagefile == null || imagefile.File.Length == 0)
+                return Content("file not selected");
+
+            try
+            {
+                var pathToSave = Path.Combine(_env.WebRootPath, imagefile.TargetFolder);
+                if (!Directory.Exists(pathToSave))
+                    Directory.CreateDirectory(pathToSave);
+
+                Logger.Debug("Check image size");
+
+                if (imagefile.File.Length > 0)
+                {
+                    Logger.Debug($"Image size = {imagefile.File.Length}");
+                    var fileName = $"{imagefile.TargetFolder}.png";//ContentDispositionHeaderValue.Parse(imagefile.File.ContentDisposition).FileName.Trim('"');
+                    var fullPath = Path.Combine(pathToSave, fileName);
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await imagefile.File.CopyToAsync(stream);
+                    }
+
+                    Logger.Debug("Image uploaded");
+                    return Ok(new { fullPath });
+                }
+                else
+                {
+                    Logger.Debug("Image not uploaded");
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return StatusCode(500, "Internal server error " + ex);
+            }
         }
 
     }
