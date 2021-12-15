@@ -95,6 +95,28 @@ namespace streamer.Controllers
             return BadRequest();
         }
 
+        [HttpGet("[action]/{type}")]
+        public IQueryable<PartnerDto> GetByType(DeliveryType type)
+        {
+            return _dbContext.Partners
+                .AsNoTracking()
+                .Include(x => x.Streamer)
+                .Where(x => x.Type == type)
+                .Select(x => new PartnerDto()
+                {
+                    Id = x.Id,
+                    FirstName = x.Streamer.FirstName,
+                    LastName = x.Streamer.LastName,
+                    Email = x.Streamer.Email,
+                    UserName = x.Streamer.UserName,
+                    DeliveryName = x.DeliveryName,
+                    DeliveryType = x.Type,
+                    Logo = GetLogoByPartnerId(x.Id)
+
+                })
+                .AsQueryable();
+        }
+
         [ODataRoute]
         [HttpGet("[action]")]
         [EnableQuery(PageSize = 25, AllowedQueryOptions = AllowedQueryOptions.All
