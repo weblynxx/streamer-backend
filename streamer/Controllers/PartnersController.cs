@@ -105,12 +105,8 @@ namespace streamer.Controllers
                 .Select(x => new PartnerDto()
                 {
                     Id = x.Id,
-                    FirstName = x.Streamer.FirstName,
-                    LastName = x.Streamer.LastName,
-                    Email = x.Streamer.Email,
                     UserName = x.Streamer.UserName,
                     DeliveryName = x.DeliveryName,
-                    DeliveryType = x.Type,
                     Logo = GetLogoByPartnerId(x.Id)
 
                 })
