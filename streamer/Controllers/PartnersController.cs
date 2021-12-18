@@ -53,8 +53,8 @@ namespace streamer.Controllers
             _mediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
         }
 
-        [HttpPost("[action]/{deliveryType}")]
-        public async Task<IActionResult> CreatePartner([FromBody] StreamerDm userParam, DeliveryType type)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreatePartnerFood([FromBody] StreamerDm userParam)
         {
             var userId = User.GetLoggedUserId();
             var user = _dbContext.Streamers.SingleOrDefault(x => x.Id == userId);
@@ -81,7 +81,49 @@ namespace streamer.Controllers
                 if (result.Succeeded)
                 {
                     var createdAppUser = await _userManager.FindByEmailAsync(userParam.Email);
-                    var model = await _mediator.Send(new PartnerAddUpdate.PartnerAddUpdateCommand(){ Streamer = createdAppUser, DeliveryName = createdAppUser.FirstName, Type = type});
+                    var model = await _mediator.Send(new PartnerAddUpdate.PartnerAddUpdateCommand(){ Streamer = createdAppUser, DeliveryName = createdAppUser.FirstName, Type = DeliveryType.Food});
+                    return Ok();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+
+            Logger.Error("BadRequest");
+            return BadRequest();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreatePartnerClothes([FromBody] StreamerDm userParam)
+        {
+            var userId = User.GetLoggedUserId();
+            var user = _dbContext.Streamers.SingleOrDefault(x => x.Id == userId);
+            if (user == null || user.Authorities != "ROLE_ADMIN")
+            {
+                return BadRequest("require_role_admin_privilege");
+            }
+
+            var password = userParam.Password;
+            Regex regex = new Regex("^(?=.*[a-z,ä,ö,ü])(?=.*[A-Z,Ä,Ö,Ü])(?=.*[0-9])(?=.*[!@_#?.$%^&*/\\\\])(?=.{8,})");
+            var isPasswordStrong = regex.IsMatch(password);
+            if (!isPasswordStrong)
+            {
+                return BadRequest("password_strong");
+            }
+
+            userParam.Token = "";
+            userParam.Password = "";
+            userParam.Authorities = "ROLE_PARTNER";
+            userParam.CreatedDate = DateTime.UtcNow;
+            try
+            {
+                var result = await _userManager.CreateAsync(userParam, password);
+                if (result.Succeeded)
+                {
+                    var createdAppUser = await _userManager.FindByEmailAsync(userParam.Email);
+                    var model = await _mediator.Send(new PartnerAddUpdate.PartnerAddUpdateCommand() { Streamer = createdAppUser, DeliveryName = createdAppUser.FirstName, Type = DeliveryType.Clothes });
                     return Ok();
 
                 }
