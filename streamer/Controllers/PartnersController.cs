@@ -178,6 +178,8 @@ namespace streamer.Controllers
         private string GetLogoByPartnerId(Guid partnerId)
         {
             var result = "";
+            if (partnerId == Guid.Empty)
+                return result;
             var mainImage = Path.Combine(_env.WebRootPath, partnerId.ToString(), $"{partnerId}.png");
 
             Logger.Debug(mainImage);

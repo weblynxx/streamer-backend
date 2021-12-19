@@ -5,6 +5,7 @@ using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NLog.Fluent;
@@ -33,6 +34,20 @@ namespace streamer.Controllers
             _dbContext = dbContext;
             _config = config;
             _userManager = userManager;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("IsExistStreamerByUserName")]
+        public async Task<bool> IsExistStreamerByUserName([FromBody] StreamerDm streamer)
+        {
+            var isExistStreamer = _dbContext.Streamers
+                .AsNoTracking()
+                .FirstOrDefault(p => p.UserName.ToLower() == streamer.UserName.ToLower());
+            if (isExistStreamer != null)
+            {
+                return true;
+            }
+            return false;
         }
 
         [AllowAnonymous]
