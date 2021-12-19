@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +15,7 @@ using NLog.Fluent;
 using PasswordGenerator;
 using streamer.db;
 using streamer.db.Database.DataModel;
+using streamer.db.Database.Dto;
 using streamer.db.Database.Helpers;
 using streamer.Features.Helpers;
 using streamer.Helpers;
@@ -27,13 +31,15 @@ namespace streamer.Controllers
         private readonly StreamerDbContext _dbContext;
         private readonly IOptions<AppSettings> _config;
         private readonly UserManager<StreamerDm> _userManager;
+        private readonly IHostingEnvironment _env;
 
         public StreamersController(StreamerDbContext dbContext, IOptions<AppSettings> config,
-            UserManager<StreamerDm> userManager)
+            UserManager<StreamerDm> userManager, IHostingEnvironment env)
         {
             _dbContext = dbContext;
             _config = config;
             _userManager = userManager;
+            _env = env;
         }
 
         [AllowAnonymous]
@@ -48,6 +54,47 @@ namespace streamer.Controllers
                 return true;
             }
             return false;
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]/{username}")]
+        public async Task<IActionResult> GetStreamerInfoByUserName(string username)
+        {
+            var streamer = _dbContext.Streamers
+                .AsNoTracking()
+                .Include(x => x.StreamerServices).ThenInclude(x => x.Service)
+                .Include(x => x.StreamerPartners).ThenInclude(x => x.Partner)
+                .FirstOrDefault(p => p.UserName.ToLower() == username.ToLower());
+            
+            if (streamer == null)
+            {
+                return BadRequest("streamer not found");
+            }
+
+            var result = new StreamerDto()
+            {
+                FirstName = streamer.FirstName,
+                LastName = streamer.LastName,
+                UserName = streamer.UserName,
+                isStoppedDelivery = streamer.isStoppedDelivery,
+                From = streamer.From,
+                To = streamer.To,
+                StreamerId = streamer.StreamerId,
+                Services = streamer
+                    .StreamerServices
+                    .Select(
+                        x => new StreamerServiceDto()
+                        {
+                            Id = x.Id, ServiceId = x.ServiceId, ServiceName = x.Service.Name, ServiceUserName = x.ServiceUserName
+                        }).ToList(),
+                Partners = streamer.StreamerPartners.Select(x => new StreamerPartnerDto() {Id = x.Id, PartnerName = x.Partner.DeliveryName, PartnerLogo = GetLogoByPartnerId(x.Id)}).ToList(),
+                FoodPreferenceText = streamer.FoodPreferenceText,
+                ClothesPreferenceText = streamer.ClothesPreferenceText
+                
+            };
+            
+            return Ok(result);
+
         }
 
         [AllowAnonymous]
@@ -305,6 +352,50 @@ namespace streamer.Controllers
             var userToken = await _userManager.GenerateUserTokenAsync(streamer, "Email", "set-new-password");
             //await SendNewPasswordViaEmail(streamer.UserName, $"{userToken}/user/{streamer.Id}", streamer.Email);
             Logger.Debug($"Sended link to set new password for email={email}");
+        }
+
+        private string GetLogoByPartnerId(Guid partnerId)
+        {
+            var result = "";
+            if (partnerId == Guid.Empty)
+                return result;
+            var mainImage = Path.Combine(_env.WebRootPath, partnerId.ToString(), $"{partnerId}.png");
+
+            Logger.Debug(mainImage);
+            if (System.IO.File.Exists(mainImage))
+            {
+                result = FromFileToBase64String(mainImage);
+
+            }
+            else
+            {
+                Logger.Debug($"File {mainImage} not exist");
+            }
+
+            return result;
+        }
+        private string FromFileToBase64String(string file)
+        {
+            try
+            {
+                using (Image image = Image.FromFile(file))
+                {
+                    using (MemoryStream m = new MemoryStream())
+                    {
+                        image.Save(m, image.RawFormat);
+                        byte[] imageBytes = m.ToArray();
+
+                        // Convert byte[] to Base64 String
+                        var base64String = Convert.ToBase64String(imageBytes);
+                        return "data:image/png;base64," + base64String;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return ex.ToString();
+            }
         }
 
     }
