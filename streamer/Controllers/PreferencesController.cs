@@ -27,7 +27,7 @@ namespace streamer.Controllers
     [Authorize]
     [ODataRoutePrefix("Preferences")]
     [Route("api/[controller]")]
-    public class PreferencesController : ODataController
+    public class PreferencesController : Controller
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly StreamerDbContext _dbContext;

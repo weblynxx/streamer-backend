@@ -34,7 +34,7 @@ namespace streamer.Controllers
     [Authorize]
     [ODataRoutePrefix("Partners")]
     [Route("api/[controller]")]
-    public class PartnersController : ODataController
+    public class PartnersController : Controller
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly StreamerDbContext _dbContext;
