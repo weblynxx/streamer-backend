@@ -64,6 +64,7 @@ namespace streamer.Controllers
                 .AsNoTracking()
                 .Include(x => x.StreamerServices).ThenInclude(x => x.Service)
                 .Include(x => x.StreamerPartners).ThenInclude(x => x.Partner)
+                .Include(x => x.StreamerPreferences).ThenInclude(x => x.Preference)
                 .FirstOrDefault(p => p.UserName.ToLower() == username.ToLower());
             
             if (streamer == null)
@@ -87,10 +88,25 @@ namespace streamer.Controllers
                         {
                             Id = x.Id, ServiceId = x.ServiceId, ServiceName = x.Service.Name, ServiceUserName = x.ServiceUserName
                         }).ToList(),
-                Partners = streamer.StreamerPartners.Select(x => new StreamerPartnerDto() {Id = x.Id, PartnerName = x.Partner.DeliveryName, PartnerLogo = GetLogoByPartnerId(x.Id)}).ToList(),
+                PartnersFood = streamer.StreamerPartners
+                    .Where(x =>x.Partner.Type == DeliveryType.Food)
+                    .Select(x => new StreamerPartnerDto()
+                    {
+                        Id = x.Id, DeliveryName = x.Partner.DeliveryName, 
+                        Logo = GetLogoByPartnerId(x.PartnerId)
+                    }).ToList(),
+                PartnersClothes = streamer.StreamerPartners
+                    .Where(x => x.Partner.Type == DeliveryType.Clothes)
+                    .Select(x => new StreamerPartnerDto()
+                    {
+                        Id = x.Id, DeliveryName = x.Partner.DeliveryName,
+                        Logo = GetLogoByPartnerId(x.PartnerId)
+                    }).ToList(),
                 FoodPreferenceText = streamer.FoodPreferenceText,
-                ClothesPreferenceText = streamer.ClothesPreferenceText
-                
+                ClothesPreferenceText = streamer.ClothesPreferenceText,
+                PreferencesFood = streamer.StreamerPreferences.Where(x => x.Preference.Type == PreferenceType.Food).Select(x => x.Preference).ToList(),
+                PreferencesClothes= streamer.StreamerPreferences.Where(x => x.Preference.Type == PreferenceType.Clothes).Select(x => x.Preference).ToList()
+
             };
             
             return Ok(result);

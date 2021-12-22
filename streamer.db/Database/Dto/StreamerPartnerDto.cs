@@ -4,8 +4,8 @@ namespace streamer.db.Database.Dto
 {
     public class StreamerPartnerDto : StreamerPartnereDm
     {
-        public string PartnerName { get; set; }
-        public string PartnerLogo { get; set; }
+        public string DeliveryName { get; set; }
+        public string Logo { get; set; }
     } 
 
 
