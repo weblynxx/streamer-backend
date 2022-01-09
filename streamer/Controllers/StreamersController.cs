@@ -188,6 +188,28 @@ namespace streamer.Controllers
             });
         }
 
+        [HttpGet("[action]")]
+        public string GetLogo()
+        {
+            var result = "";
+            var userId = User.GetLoggedUserId();
+            if (userId == Guid.Empty)
+                return result;
+            var mainImage = Path.Combine(_env.WebRootPath, userId.ToString(), "logo.png");
+
+            Logger.Debug(mainImage);
+            if (System.IO.File.Exists(mainImage))
+            {
+                result = FromFileToBase64String(mainImage);
+
+            }
+            else
+            {
+                Logger.Debug($"File {mainImage} not exist");
+            }
+
+            return result;
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] StreamerDm streamer)
@@ -360,7 +382,51 @@ namespace streamer.Controllers
             Logger.Debug().Message("Returned").Write();
             return Ok(newPassword);
         }
-        
+
+        [HttpPost("[action]")]
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadLogo(ImageFile imagefile)
+        {
+
+            if (imagefile == null || imagefile.File.Length == 0)
+                return Content("file not selected");
+            var streamerId = User.GetLoggedUserId();
+
+            try
+            {
+                var pathToSave = Path.Combine(_env.WebRootPath, streamerId.ToString());
+                if (!Directory.Exists(pathToSave))
+                    Directory.CreateDirectory(pathToSave);
+
+                Logger.Debug("Check image size");
+
+                if (imagefile.File.Length > 0)
+                {
+                    Logger.Debug($"Image size = {imagefile.File.Length}");
+                    var fileName = $"{imagefile.TargetFolder}.png";//ContentDispositionHeaderValue.Parse(imagefile.File.ContentDisposition).FileName.Trim('"');
+                    var fullPath = Path.Combine(pathToSave, fileName);
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await imagefile.File.CopyToAsync(stream);
+                    }
+
+                    Logger.Debug("Image uploaded");
+                    return Ok(new { fullPath });
+                }
+                else
+                {
+                    Logger.Debug("Image not uploaded");
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return StatusCode(500, "Internal server error " + ex);
+            }
+        }
+
         private async Task SendLinkToSetNewPasswordViaEmail(string email, string userName)
         {
             var streamer = String.IsNullOrEmpty(userName) ? _dbContext.Streamers.SingleOrDefault(x => x.Email.ToLower() == email.ToLower()): _dbContext.Streamers.SingleOrDefault(x => x.Email.ToLower() == email.ToLower() && x.UserName.ToLower() == userName.ToLower());
