@@ -15,7 +15,12 @@ namespace streamer
             try
             {
                 logger.Debug("init main");
-                CreateWebHostBuilder(args).Build().Run();
+                CreateWebHostBuilder(args)
+                    .UseKestrel(options =>
+                    {
+                        options.Limits.MaxRequestBodySize = 10000000;
+                    })
+                    .Build().Run();
             }
             catch (Exception ex)
             {
