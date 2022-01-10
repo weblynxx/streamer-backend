@@ -18,7 +18,7 @@ namespace streamer
                 CreateWebHostBuilder(args)
                     .UseKestrel(options =>
                     {
-                        options.Limits.MaxRequestBodySize = 10000000;
+                        options.Limits.MaxRequestBodySize = null;
                     })
                     .Build().Run();
             }
