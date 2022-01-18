@@ -211,6 +211,36 @@ namespace streamer.Controllers
             return result;
         }
 
+        [AllowAnonymous]
+        [HttpGet("[action]/{userName}")]
+        public string GetLogoByUserName(string userName)
+        {
+            var result = "";
+            if (userName == "")
+            {
+                return result;
+            }
+
+            var userId = _dbContext.Streamers.SingleOrDefault(x => x.UserName == userName).Id;
+            if (userId == Guid.Empty)
+                return result;
+            var mainImage = Path.Combine(_env.WebRootPath, userId.ToString(), "logo.png");
+
+            Logger.Debug(mainImage);
+            if (System.IO.File.Exists(mainImage))
+            {
+                result = FromFileToBase64String(mainImage);
+
+            }
+            else
+            {
+                Logger.Debug($"File {mainImage} not exist");
+            }
+
+            return result;
+        }
+
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] StreamerDm streamer)
         {
